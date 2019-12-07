@@ -1,0 +1,22 @@
+table {
+  width: 100%;
+}
+
+mat-nav-list.list-horizontal {
+  padding: 0;
+}
+mat-nav-list.list-horizontal .mat-list-item {
+  display: inline-block;
+  height: auto;
+  width: auto;
+}
+
+.mat-toolbar-row {
+  font-size: 14px;
+}
+
+.nav-dropdown {
+  padding-top: 5px;
+  padding-right: 10px;
+  padding-left: 5px;
+}

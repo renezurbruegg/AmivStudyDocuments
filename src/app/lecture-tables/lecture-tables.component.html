@@ -1,0 +1,62 @@
+<mat-toolbar color="primary">
+    <mat-toolbar-row>
+        <span>{{title}}</span>
+
+        <!-- <div fxFlex></div>
+    <mat-nav-list  class="list-horizontal">
+   <a mat-list-item [href] = "id" fragment="type"  *ngFor = "let type of typeLabels"> {{type}} </a>
+  </mat-nav-list> -->
+
+        <div style="width:20px"></div>
+        <mat-form-field class="nav-dropdown">
+            <mat-label>Departement</mat-label>
+            <mat-select [(value)]="depValue" (selectionChange)="onDepChanged()">
+                <mat-option *ngFor="let dep of departement" [value]="dep">{{dep}}</mat-option>
+            </mat-select>
+        </mat-form-field>
+        <mat-spinner color="accent" [diameter]="20" [style.display]="showSpinner1 ? 'block' : 'none'"></mat-spinner>
+
+
+
+        <mat-form-field class="nav-dropdown">
+            <mat-label>Semester</mat-label>
+            <mat-select [(value)]="semValue" (selectionChange)="onSemChanged()">
+                <mat-option *ngFor="let sem of semesters" [value]="sem">{{sem}}</mat-option>
+            </mat-select>
+        </mat-form-field>
+        <mat-spinner color="accent" [diameter]="20" [style.display]="showSpinner2 ? 'block' : 'none'"></mat-spinner>
+
+        <mat-form-field class="nav-dropdown">
+            <mat-label>Vorlesung</mat-label>
+            <mat-select [(value)]="lectureValue" (selectionChange)="onLectureChanged()">
+                <mat-option *ngFor="let lec of lectures" [value]="lec">{{lec}}</mat-option>
+            </mat-select>
+        </mat-form-field>
+
+        <mat-spinner color="accent" [diameter]="20" [style.display]="showSpinner3 ? 'block' : 'none'"></mat-spinner>
+
+
+
+    </mat-toolbar-row>
+</mat-toolbar>
+
+
+<!--
+<p *ngFor = "let lec of lectures">
+    <a [href] = "getPathForLec(lec)">{{lec}}</a>
+  </p> -->
+
+
+<div fxLayout="row wrap" fxLayoutAlign="space-evenly">
+    <div class="content" style="text-align: center" fxFlex.gt-xs="500px" fxFlex.gt-sm="800px" fxFlex.gt-md="1000px" fxFlex.gt-lg="1140px">
+
+
+
+        <div *ngFor="let type of typeLabels">
+            <app-resource-table [studyDocEntries]="getEntry(type)" [idTag]="type">
+            </app-resource-table>
+
+        </div>
+
+    </div>
+</div>

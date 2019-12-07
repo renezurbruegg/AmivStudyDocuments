@@ -1,0 +1,64 @@
+<div class="mat-elevation-z8" style="margin:20px;" [id]="idTag">
+    <div class="title">
+        <h1 class="mat-h1 title"> {{studyDocEntries[0].type}} </h1>
+    </div>
+    <mat-form-field style="width:90%">
+        <input matInput (keyup)="applyFilter($event.target.value)" placeholder="Filter">
+    </mat-form-field>
+    <table mat-table [dataSource]="dataSource" matSort>
+        <ng-container [matColumnDef]="column" *ngFor="let column of columnsToDisplay">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header> {{getLabel(column)}} </th>
+            <td mat-cell *matCellDef="let element">
+                <div *ngIf="column!='files'">
+                    {{element[column]}}
+                </div>
+                <div class="links" *ngIf="column=='files'">
+                    <mat-list>
+
+                        <mat-list-item *ngFor="let file of element['files']">
+
+                            <button mat-stroked-button (click)="openRes(file)" color="primary"> {{getLinkName(file.name)}}  <mat-icon style="color:black;font-size: 20px;
+margin-top: 2px;">open_in_new</mat-icon></button>
+
+
+                        </mat-list-item>
+                    </mat-list>
+                </div>
+
+            </td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; let even = even; columns: displayedColumns;" [ngClass]="{gray: even}"></tr>
+    </table>
+
+    <!--<table mat-table
+       [dataSource]="dataSource" matSort multiTemplateDataRows>
+  <ng-container matColumnDef="{{column}}" *ngFor="let column of columnsToDisplay">
+    <th mat-header-cell *matHeaderCellDef mat-sort-header> {{getLabelForKey(column)}} </th>
+
+    <td mat-cell *matCellDef="let element"> {{getContent(element, column)}} </td>
+  </ng-container>
+
+  <ng-container matColumnDef="expandedDetail">
+    <td mat-cell *matCellDef="let element" [attr.colspan]="columnsToDisplay.length">
+      <div class="example-element-detail"
+           [@detailExpand]="'expanded'">
+
+        <div style ="text-align:right; width:100%" class="example-element-description" *ngFor = "let file of element.files"  style = "text-align:center">
+        <a [href] = "getPath(file)"> {{file.name}} </a>
+        </div>
+      </div>
+    </td>
+  </ng-container>
+
+  <tr mat-header-row *matHeaderRowDef="columnsToDisplay"></tr>
+  <tr mat-row *matRowDef="let element; columns: columnsToDisplay;"
+      class="example-element-row"
+      [class.example-expanded-row]="expandedElement === element"
+      (click)="expandedElement = expandedElement === element ? null : element">
+  </tr>
+  <tr mat-row *matRowDef="let row; columns: ['expandedDetail']" class="example-detail-row"></tr>
+</table>  -->
+    <mat-paginator [pageSizeOptions]="[15, 30, 100]"></mat-paginator>
+</div>

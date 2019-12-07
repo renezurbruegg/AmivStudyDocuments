@@ -1,0 +1,134 @@
+<div fxLayout="row wrap" fxLayoutAlign="space-evenly">
+    <div class="content" style="text-align: center" fxFlex.gt-xs="500px" fxFlex.gt-sm="800px" fxFlex.gt-md="1000px" fxFlex.gt-lg="1140px">
+
+
+        <mat-card class="example-card" style="margin-top:10%">
+
+            <mat-card-header>
+
+                <mat-card-title>Login</mat-card-title>
+
+            </mat-card-header>
+
+            <mat-card-content>
+
+
+                <form class="example-form" style="margin-top:20px;">
+
+                    <table class="example-full-width" cellspacing="0" style="display:block">
+
+                        <tr>
+
+                            <td style="text-align:center">
+                                <mat-form-field class="example-full-width" style="display:block;">
+                                    <input matInput placeholder="Username" [(ngModel)]="username" name="username" required>
+                                </mat-form-field>
+                            </td>
+
+                        </tr>
+                        <tr>
+
+                            <td style="text-align:center">
+                                <mat-form-field class="example-full-width" style="display:block;">
+                                    <input matInput placeholder="Password" [(ngModel)]="password" name="password" type="password" required>
+                                </mat-form-field>
+                            </td>
+
+                        </tr>
+
+
+
+                    </table>
+
+                </form>
+
+
+
+            </mat-card-content>
+
+            <mat-card-actions>
+
+                <button mat-raised-button (click)="login()" color="primary">Login</button>
+
+            </mat-card-actions>
+
+        </mat-card>
+
+
+
+        <mat-card class="example-card" style="margin-top:10%">
+
+            <mat-card-header>
+
+                <mat-card-title>Login (Token)</mat-card-title>
+
+            </mat-card-header>
+
+            <mat-card-content>
+
+                <mat-expansion-panel>
+                    <mat-expansion-panel-header>
+                        <mat-panel-title>
+                            <h2> How to obtain token: </h2>
+                        </mat-panel-title>
+                    </mat-expansion-panel-header>
+
+
+                    <ul style="text-align: left">
+                        <li> 1) Login on the AMIV Website and select keep me logged in </li>
+                        <li> 2) While still on the AMIV Website open the Javascript console:
+
+                            <ul>
+                                <li> <span> Firefox:<kbd>Ctrl</kbd> <kbd>Shift</kbd>  +<kbd>K</kbd> </span></li>
+                                <li> <span> Chrome / Edge:<kbd>Ctrl</kbd> <kbd>Shift</kbd> +  <kbd>J</kbd> </span></li>
+                            </ul>
+                            <li> Enter the following to get your Token:
+                                <p>
+                                    <code>JSON.parse(localStorage.getItem("session")).token</code>
+                                </p>
+                            </li>
+                    </ul>
+
+
+                    <img src="./assets/token.png" style="max-width:100%; height:auto;">
+                </mat-expansion-panel>
+
+                <form class="example-form" style="margin-top:20px;">
+
+                    <table class="example-full-width" cellspacing="0" style="display:block">
+
+                        <tr>
+
+                            <td style="text-align:center">
+
+                                <mat-form-field class="example-full-width" style="display:block;">
+
+                                    <input matInput placeholder="Session Token" [(ngModel)]="token" name="token" required>
+
+                                </mat-form-field>
+
+                            </td>
+
+                        </tr>
+
+
+
+
+                    </table>
+
+                </form>
+
+
+
+            </mat-card-content>
+
+            <mat-card-actions>
+
+                <button mat-raised-button (click)="loginUsingToken()" color="primary">Set Token</button>
+
+            </mat-card-actions>
+
+        </mat-card>
+
+    </div>
+</div>
