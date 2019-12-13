@@ -2,7 +2,6 @@
 
 import { Routes, RouterModule } from '@angular/router';
 import { LectureTablesComponent } from './lecture-tables/lecture-tables.component';
-import { OverviewPageComponent } from './overview-page/overview-page.component';
 import { LoginComponent } from './login/login.component';
 import { NgModule } from '@angular/core';
 

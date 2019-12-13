@@ -1,10 +1,10 @@
 import { Component, OnInit, Input, ViewChild } from '@angular/core';
-import { StudyDocEntry } from 'src/models/models';
 import { MatTableDataSource } from '@angular/material/table';
-import { MatSort } from '@angular/material';
+import { MatSort } from '@angular/material/sort';
 import {animate, state, style, transition, trigger} from '@angular/animations';
 import {MatPaginator} from '@angular/material/paginator';
 import {MatIconModule} from '@angular/material/icon';
+import {StudyDocEntry} from '../models/models';
 
 @Component({
   selector: 'app-resource-table',

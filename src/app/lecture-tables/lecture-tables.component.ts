@@ -1,12 +1,13 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { StudyDocRecord, StudyDocEntry } from 'src/models/models';
+
 import {animate, state, style, transition, trigger} from '@angular/animations';
 
 import {MatTableDataSource} from '@angular/material/table';
 import {MatSort} from '@angular/material/sort';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ChangeDetectorRef } from '@angular/core';
+import {StudyDocEntry, StudyDocRecord} from '../models/models';
 
 @Component({
   selector: 'app-lecture-tables',
