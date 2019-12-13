@@ -28,16 +28,30 @@ export class LectureTablesComponent implements OnInit {
   departement: Array<string> = [];
   semesters: Array<string> = [];
   depValue;
+  selectedDep;
   semValue;
   lectureValue;
   lectures : Array<string> = [];
   showSpinner1: boolean = false;
   showSpinner2: boolean = false;
   showSpinner3: boolean = false;
+  allSemester = "all";
+  allDep = "all";
+  private selectedSemValue: string;
 
   onDepChanged() {
     console.log("dep cahnged " )
     console.log(this.depValue);
+    this.selectedDep = this.depValue;
+ //selectedSemValue
+    if(this.depValue == this.allDep) {
+      console.log("got all deps. Replacing with corresponding value");
+      for(let dep of this.departement){
+          if(dep != this.allDep) {
+            this.selectedDep = this.selectedDep + "\",\"" + dep;
+          }
+      }
+    }
     this.loadForDepartement();
   }
   async delay(ms: number) {
@@ -65,6 +79,16 @@ export class LectureTablesComponent implements OnInit {
         this.loadDataForUrl(path, 1);
       }
   onSemChanged() {
+ //selectedSemValue
+            this.selectedSemValue = this.semValue;
+    if(this.semValue == this.allSemester) {
+      console.log("got all sems. Replacing with corresponding value");
+      for(let sem of this.semesters){
+          if(sem != this.allDep) {
+            this.selectedSemValue = this.selectedSemValue + "\",\"" + sem;
+          }
+      }
+    }
       this.loadForSemester();
   }
 
@@ -74,9 +98,17 @@ export class LectureTablesComponent implements OnInit {
   }
   loadForSemester(){
   //  let path = "https://api.amiv.ethz.ch/studydocuments?where={\"department\":\""+ this.depValue + "\",\"semester\":\""+ this.semValue + "\" }";
-    let path = "https://api.amiv.ethz.ch/studydocuments?where=%7B%22semester%22%3A%7B%22%24in%22%3A%5B%22"+/*"5%2B"*/ this.semValue+"%22%5D%7D%2C%22department%22%3A%7B%22%24in%22%3A%5B%22"+ this.depValue +"%22%5D%7D%7D&sort=lecture%2C-course_year%2Ctype%2Ctitle%2Cauthor&max_results=10&page=1"
-    path = path.replace("+","%2B");
 
+
+
+    let path = "https://api.amiv.ethz.ch/studydocuments";
+    // ?where=%7B%22semester%22%3A%7B%22%24in%22%3A%5B%22"+/*"5%2B"*/ this.semValue+"%22%5D%7D%2C%22department%22%3A%7B%22%24in%22%3A%5B%22"+ this.depValue +"%22%5D%7D%7D&sort=lecture%2C-course_year%2Ctype%2Ctitle%2Cauthor&max_results=10&page=1"
+
+
+    let res = "?where={\"semester\":{\"$in\":[\""+this.selectedSemValue+"\"]},\"department\":{\"$in\":[\""+this.selectedDep+"\"]}}";
+
+    path = path + encodeURI(res);
+      path = path.replace("+","%2B");
     console.log(path);
 
 
@@ -99,13 +131,18 @@ export class LectureTablesComponent implements OnInit {
         }
             this.showSpinner2 = false;
 
+        console.log("---")
+        console.log(this.lectures.sort())
+        console.log("---")
       console.log(data["_summary"]);
     });
   }
   loadForDepartement() {
 
         this.showSpinner1 = true;
-    let path = "https://api.amiv.ethz.ch/studydocuments?where={\"department\":\""+ this.depValue + "\"}";
+    let path = "https://api.amiv.ethz.ch/studydocuments";
+    let res = "?where={\"department\":{\"$in\":[\""+this.selectedDep+"\"]}}";
+    path = path + encodeURI(res); ;
     console.log(path);
     var header = {
       headers: new HttpHeaders()
@@ -133,6 +170,8 @@ export class LectureTablesComponent implements OnInit {
         return 0;
     });
 
+      this.semesters = [this.allSemester].concat(this.semesters);
+
         this.showSpinner1 = false;
       console.log(data["_summary"]);
     });
@@ -151,10 +190,12 @@ export class LectureTablesComponent implements OnInit {
       let summary = data["_summary"];
       let departements = summary["department"];
       this.departement = [];
+      this.departement.push(this.allDep);
       for(let dep in departements){
         console.log(dep)
         this.departement.push(dep);
       }
+      this.departement.sort();
       console.log(data["_summary"]);
 
           this.showSpinner1 = false;
