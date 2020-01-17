@@ -348,9 +348,14 @@ addEntryToMap(e){
    } catch (e) { }
 
     let id = this.route.snapshot.params['id'];
+
+    let path = "https://api.amiv.ethz.ch/studydocuments?where={\"lecture\":\"" + id + "\"}&sort=type%2C-course_year&max_result=500";
     if(id.endsWith("$")) {
       id = id.substring(0,id.length - 1);
       this.searchInput = id;
+
+      path = 'https://api.amiv.ethz.ch/studydocuments?where={"lecture":{"$regex":"' + id + '", "$options": "i"}}'
+      path = encodeURI(path)
     }
     if(!id) {
       return;
@@ -359,31 +364,38 @@ addEntryToMap(e){
     id = id.replace("*", "/")
     this.title = id;
     console.log(id);
-    let path = "https://api.amiv.ethz.ch/studydocuments?where={\"lecture\":\"" + id + "\"}&sort=type%2C-course_year&max_result=500";
+
     this.loadDataForUrl(path, 1 , () => this.loadDataForLegacy(id) );
   }
 
   change() {
 
-      this.rootRecord = { _items: [] };
-      this.typeToEntryMap = {};
-      this.lastTypeAdded = undefined;
-      this.typeLabels = [];
-      this._typeLabels = [];
-      this.ref.markForCheck();
+    this.rootRecord = {_items: []};
+    this.typeToEntryMap = {};
+    this.lastTypeAdded = undefined;
+    this.typeLabels = [];
+    this._typeLabels = [];
+    this.ref.markForCheck();
 
 
-      this.rootRecord= { _items: [] };
+    this.rootRecord = {_items: []};
 
 
-    this.router.navigate(['/lecture/'+this.searchInput+"$"]);
+    this.router.navigate(['/lecture/' + this.searchInput + "$"]);
     let id = this.searchInput
 
-    if(id.endsWith("$")) {
-      id = id.substring(0,id.length - 1);
+    if (id.endsWith("$")) {
+      id = id.substring(0, id.length - 1);
       this.searchInput = id;
     }
+
     let path = "https://api.amiv.ethz.ch/studydocuments?where={\"lecture\":\"" + id + "\"}&sort=type%2C-course_year&max_result=500";
+
+    // let res = "?where={\"department\":{\"$in\":[\""+this.selectedDep+"\"]}}";
+    if (this.searchInput) {
+      path = 'https://api.amiv.ethz.ch/studydocuments?where={"lecture":{"$regex":"' + id + '", "$options": "i"}}'
+      path = encodeURI(path)
+    }
     this.loadDataForUrl(path, 1 , () => this.loadDataForLegacy(id) );
   }
 }

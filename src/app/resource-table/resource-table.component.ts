@@ -49,11 +49,11 @@ export class ResourceTableComponent implements OnInit {
     public studyDocEntries :Array<StudyDocEntry>;
     public dataSource: MatTableDataSource<StudyDocEntry>;
 
-    displayedColumns = [  "title", "professor", "author", "course_year", "files"]
+    displayedColumns = [  "title", "professor", "author", "course_year", "files", 'lecture']
   @ViewChild(MatSort, {static: true}) sort: MatSort;
 
     columnsToDisplay = [
-    "title", "professor", "author", "course_year", "files"
+    "title", "professor", "author", "course_year", "files", 'lecture'
     ];
 
   constructor() {
