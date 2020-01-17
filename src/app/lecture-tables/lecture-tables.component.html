@@ -34,9 +34,14 @@
         </mat-form-field>
 
         <mat-spinner color="accent" [diameter]="20" [style.display]="showSpinner3 ? 'block' : 'none'"></mat-spinner>
+      <div style="width:100%"></div>
+      <div style="float:right">
 
+       <mat-form-field class="example-full-width">
+        <input matInput placeholder="Search Lecture" (change)="change()"  [(ngModel)]="searchInput">
+      </mat-form-field>
 
-
+      </div>
     </mat-toolbar-row>
 </mat-toolbar>
 

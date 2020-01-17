@@ -25,6 +25,9 @@ export class LectureTablesComponent implements OnInit {
   title:string = "";
   token: string;
 
+  searchInput: string = "";
+
+
   departement: Array<string> = [];
   semesters: Array<string> = [];
   depValue;
@@ -76,7 +79,7 @@ export class LectureTablesComponent implements OnInit {
       this.rootRecord= { _items: [] };
 
       this.router.navigate(['/lecture/'+this.lectureValue]);
-        this.loadDataForUrl(path, 1);
+        this.loadDataForUrl(path, 1, () => {this.loadDataForLegacy(this.lectureValue )});
       }
   onSemChanged() {
  //selectedSemValue
@@ -254,13 +257,23 @@ getEntry(type){
 addEntryToMap(e){
 
   if(e.type in this.typeToEntryMap) {
+      console.log( this.typeToEntryMap[e.type])
+      for (let entry of  this.typeToEntryMap[e.type]) {
+        if (entry.title == e.title)
+          return
+      }
       this.typeToEntryMap[e.type].push(e);
+
+        console.log("---- e ----")
+        console.log(e)
 
   } else {
     this.typeToEntryMap[e.type] = [e]
     this._typeLabels.push(e.type);
 
 
+        console.log("---- e ----")
+        console.log(e.type)
     if(this.lastTypeAdded) {
       // Added new type. store old ones
       this.typeLabels.push(this.lastTypeAdded);
@@ -270,7 +283,7 @@ addEntryToMap(e){
 }
 
 // `Zca1pl7pxodMTQL88T8ziUQjoqwa60bZVe6xf9TC5fU`
-  loadDataForUrl(path: string, page:number){
+  loadDataForUrl(path: string, page:number, cb: any){
     var header = {
       headers: new HttpHeaders()
         .set('Authorization', this.token)
@@ -278,29 +291,48 @@ addEntryToMap(e){
 
     this.http.get(path + "&page="+page, header).subscribe( (data : StudyDocRecord) => {
       console.log("got data");
-      console.log(data);
-      this.rootRecord = data;
+      console.log(data._items);
+      this.rootRecord = data._items;
 
       data._items.forEach(e => {
         this.addEntryToMap(e)
       });
+
       let links = data["_links"];
 
-      if(links["next"]) {
-        this.loadDataForUrl(path, ++page);
+      if(links && links["next"]) {
+        this.loadDataForUrl(path, ++page, cb);
       } else {
+        cb()
         this.showSpinner3 = false;
         // Date loaded, push last type.
-        if(this.lastTypeAdded) {
-          // Added new type. store old ones
-          this.typeLabels.push(this.lastTypeAdded);
-        }
 
       }
       console.log(this.typeToEntryMap)
 
+
     })
   }
+
+  private loadDataForLegacy(name) {
+    let url = "https://matapi.mensazurich.ch/"
+    this.http.get(url + "/mat/forName/"+name).subscribe( (data : any) => {
+      console.log("got data logacy");
+      console.log(data);
+      data.forEach(e => {
+      e.isLegacy = true
+        e.professor = "(legacy page)"
+        this.addEntryToMap(e)
+      });
+
+
+      if(this.lastTypeAdded) {
+        // Added new type. store old ones
+        this.typeLabels.push(this.lastTypeAdded);
+      }
+    })
+  }
+
 
   ngOnInit() {
     console.log("on init");
@@ -316,7 +348,10 @@ addEntryToMap(e){
    } catch (e) { }
 
     let id = this.route.snapshot.params['id'];
-
+    if(id.endsWith("$")) {
+      id = id.substring(0,id.length - 1);
+      this.searchInput = id;
+    }
     if(!id) {
       return;
     }
@@ -325,6 +360,30 @@ addEntryToMap(e){
     this.title = id;
     console.log(id);
     let path = "https://api.amiv.ethz.ch/studydocuments?where={\"lecture\":\"" + id + "\"}&sort=type%2C-course_year&max_result=500";
-    this.loadDataForUrl(path, 1);
+    this.loadDataForUrl(path, 1 , () => this.loadDataForLegacy(id) );
+  }
+
+  change() {
+
+      this.rootRecord = { _items: [] };
+      this.typeToEntryMap = {};
+      this.lastTypeAdded = undefined;
+      this.typeLabels = [];
+      this._typeLabels = [];
+      this.ref.markForCheck();
+
+
+      this.rootRecord= { _items: [] };
+
+
+    this.router.navigate(['/lecture/'+this.searchInput+"$"]);
+    let id = this.searchInput
+
+    if(id.endsWith("$")) {
+      id = id.substring(0,id.length - 1);
+      this.searchInput = id;
+    }
+    let path = "https://api.amiv.ethz.ch/studydocuments?where={\"lecture\":\"" + id + "\"}&sort=type%2C-course_year&max_result=500";
+    this.loadDataForUrl(path, 1 , () => this.loadDataForLegacy(id) );
   }
 }

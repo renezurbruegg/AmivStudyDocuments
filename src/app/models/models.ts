@@ -3,5 +3,6 @@ export interface StudyDocRecord {
 }
 
 export interface StudyDocEntry {
+    title: any;
   type: string;
 }

@@ -38,6 +38,7 @@ import { ResourceTableComponent } from './resource-table/resource-table.componen
 import { LoginComponent } from './login/login.component';
 import { FormsModule } from '@angular/forms';
 import { ErrorInterceptor } from './login/error.interceptor';
+import {MatAutocomplete} from "@angular/material/autocomplete";
 
 
 

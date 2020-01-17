@@ -56,9 +56,11 @@ export class ResourceTableComponent implements OnInit {
     "title", "professor", "author", "course_year", "files"
     ];
 
-  constructor() { }
-  openRes(file) {
-     window.open(this.getPath(file), "_blank");
+  constructor() {
+    console.log(this.studyDocEntries)
+  }
+  openRes(file, el) {
+     window.open(this.getPath(file, el), "_blank");
   }
 
   applyFilter(filterValue: string) {
@@ -86,7 +88,15 @@ export class ResourceTableComponent implements OnInit {
       return key;
     }
 
-  getPath(item) {
+  getPath(item, el) {
+    if(el.isLegacy)
+      return item.file
+
     return 'https://api.amiv.ethz.ch/' + item.file;
+  }
+
+  debug(element: any) {
+    console.log(element)
+    return true
   }
 }
