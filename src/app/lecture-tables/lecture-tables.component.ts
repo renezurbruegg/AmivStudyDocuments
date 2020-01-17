@@ -315,7 +315,7 @@ addEntryToMap(e){
   }
 
   private loadDataForLegacy(name) {
-    let url = "https://matapi.mensazurich.ch/"
+    let url = "https://matapi.mensazurich.ch"
     this.http.get(url + "/mat/forName/"+name).subscribe( (data : any) => {
       console.log("got data logacy");
       console.log(data);
