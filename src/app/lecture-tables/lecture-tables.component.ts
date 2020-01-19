@@ -259,7 +259,7 @@ addEntryToMap(e){
   if(e.type in this.typeToEntryMap) {
       console.log( this.typeToEntryMap[e.type])
       for (let entry of  this.typeToEntryMap[e.type]) {
-        if (entry.title == e.title)
+        if (entry.course_year == e.course_year && entry.author == e.author && entry.title == e.title)
           return
       }
       this.typeToEntryMap[e.type].push(e);
