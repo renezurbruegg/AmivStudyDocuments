@@ -63,7 +63,19 @@ export class LectureTablesComponent implements OnInit {
 
   onLectureChanged() {
 
-      let path = "https://api.amiv.ethz.ch/studydocuments?where={\"lecture\":\"" + this.lectureValue + "\"}&sort=type%2C-course_year&max_result=500";
+
+      //let path = "https://api.amiv.ethz.ch/studydocuments?where={\"lecture\":\"" + this.lectureValue + "\"}&sort=type%2C-course_year&max_result=500";
+
+
+    let path = "https://api.amiv.ethz.ch/studydocuments";
+    // ?where=%7B%22semester%22%3A%7B%22%24in%22%3A%5B%22"+/*"5%2B"*/ this.semValue+"%22%5D%7D%2C%22department%22%3A%7B%22%24in%22%3A%5B%22"+ this.depValue +"%22%5D%7D%7D&sort=lecture%2C-course_year%2Ctype%2Ctitle%2Cauthor&max_results=10&page=1"
+
+
+    let res = "?where={\"semester\":{\"$in\":[\""+this.selectedSemValue+"\"]},\"department\":{\"$in\":[\""+this.selectedDep+"\"]}, \"lecture\":\"" + this.lectureValue + "\"}&sort=type,-course_year&max_results=500";
+
+    path = path + encodeURI(res);
+      path = path.replace("+","%2B");
+    console.log(path);
       console.log(path);
       this.title = this.lectureValue
 
@@ -129,14 +141,15 @@ export class LectureTablesComponent implements OnInit {
     //  this.lectures =  [];
 
         for(let lec in lectures_load){
-          console.log(lec)
+         // console.log(lec)
           this.lectures.push(lec);
         }
             this.showSpinner2 = false;
 
-        console.log("---")
-        console.log(this.lectures.sort())
-        console.log("---")
+        //console.log("---")
+      this.lectures.sort()
+        //console.log(this.lectures.sort())
+        //console.log("---")
       console.log(data["_summary"]);
     });
   }
@@ -146,7 +159,7 @@ export class LectureTablesComponent implements OnInit {
     let path = "https://api.amiv.ethz.ch/studydocuments";
     let res = "?where={\"department\":{\"$in\":[\""+this.selectedDep+"\"]}}";
     path = path + encodeURI(res); ;
-    console.log(path);
+    //console.log(path);
     var header = {
       headers: new HttpHeaders()
         .set('Authorization',  this.token)
@@ -157,7 +170,7 @@ export class LectureTablesComponent implements OnInit {
       let semester = summary["semester"];
       this.semesters = [];
       for(let sem in semester){
-        console.log(sem)
+        //console.log(sem)
         this.semesters.push(sem);
       }
 
@@ -176,7 +189,7 @@ export class LectureTablesComponent implements OnInit {
       this.semesters = [this.allSemester].concat(this.semesters);
 
         this.showSpinner1 = false;
-      console.log(data["_summary"]);
+      //console.log(data["_summary"]);
     });
   }
 
@@ -195,11 +208,11 @@ export class LectureTablesComponent implements OnInit {
       this.departement = [];
       this.departement.push(this.allDep);
       for(let dep in departements){
-        console.log(dep)
+       // console.log(dep)
         this.departement.push(dep);
       }
       this.departement.sort();
-      console.log(data["_summary"]);
+     // console.log(data["_summary"]);
 
           this.showSpinner1 = false;
     });
@@ -245,7 +258,7 @@ getPath(item) {
   }
 
 getIdTag(item) {
-  console.log("get id tag" + item);
+  //console.log("get id tag" + item);
   return "#"+item;
 }
 
@@ -257,23 +270,23 @@ getEntry(type){
 addEntryToMap(e){
 
   if(e.type in this.typeToEntryMap) {
-      console.log( this.typeToEntryMap[e.type])
+     // console.log( this.typeToEntryMap[e.type])
       for (let entry of  this.typeToEntryMap[e.type]) {
         if (entry.course_year == e.course_year && entry.author == e.author && entry.title == e.title)
           return
       }
       this.typeToEntryMap[e.type].push(e);
 
-        console.log("---- e ----")
-        console.log(e)
+        //console.log("---- e ----")
+        //console.log(e)
 
   } else {
     this.typeToEntryMap[e.type] = [e]
     this._typeLabels.push(e.type);
 
 
-        console.log("---- e ----")
-        console.log(e.type)
+       // console.log("---- e ----")
+       // console.log(e.type)
     if(this.lastTypeAdded) {
       // Added new type. store old ones
       this.typeLabels.push(this.lastTypeAdded);
@@ -290,8 +303,8 @@ addEntryToMap(e){
     };
 
     this.http.get(path + "&page="+page, header).subscribe( (data : StudyDocRecord) => {
-      console.log("got data");
-      console.log(data._items);
+     // console.log("got data");
+     // console.log(data._items);
       this.rootRecord = data._items;
 
       data._items.forEach(e => {
